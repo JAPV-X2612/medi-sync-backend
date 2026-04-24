@@ -1,0 +1,169 @@
+services:
+
+  # INFRASTRUCTURE
+  postgres:
+    image: postgres:16-alpine
+    container_name: medisync-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - medi-sync-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: medisync-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    ports:
+      - "${RABBITMQ_PORT}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT}:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - medi-sync-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+
+  # MICROSERVICES 
+
+  auth-service:
+    image: node:20-alpine
+    container_name: medisync-auth-service
+    restart: unless-stopped
+    command: sh -c "echo 'auth-service placeholder - waiting for implementation' && sleep infinity"
+    environment:
+      PORT: ${AUTH_SERVICE_PORT}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      EVENTS_EXCHANGE: ${EVENTS_EXCHANGE}
+      COMMANDS_EXCHANGE: ${COMMANDS_EXCHANGE}
+    ports:
+      - "${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - medi-sync-network
+
+  patient-service:
+    image: node:20-alpine
+    container_name: medisync-patient-service
+    restart: unless-stopped
+    command: sh -c "echo 'patient-service placeholder - waiting for implementation' && sleep infinity"
+    environment:
+      PORT: ${PATIENT_SERVICE_PORT}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      EVENTS_EXCHANGE: ${EVENTS_EXCHANGE}
+      COMMANDS_EXCHANGE: ${COMMANDS_EXCHANGE}
+    ports:
+      - "${PATIENT_SERVICE_PORT}:${PATIENT_SERVICE_PORT}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - medi-sync-network
+
+  doctor-service:
+    image: node:20-alpine
+    container_name: medisync-doctor-service
+    restart: unless-stopped
+    command: sh -c "echo 'doctor-service placeholder - waiting for implementation' && sleep infinity"
+    environment:
+      PORT: ${DOCTOR_SERVICE_PORT}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      EVENTS_EXCHANGE: ${EVENTS_EXCHANGE}
+      COMMANDS_EXCHANGE: ${COMMANDS_EXCHANGE}
+    ports:
+      - "${DOCTOR_SERVICE_PORT}:${DOCTOR_SERVICE_PORT}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - medi-sync-network
+
+  appointments-service:
+    image: node:20-alpine
+    container_name: medisync-appointments-service
+    restart: unless-stopped
+    command: sh -c "echo 'appointments-service placeholder - waiting for implementation' && sleep infinity"
+    environment:
+      PORT: ${APPOINTMENTS_SERVICE_PORT}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      EVENTS_EXCHANGE: ${EVENTS_EXCHANGE}
+      COMMANDS_EXCHANGE: ${COMMANDS_EXCHANGE}
+    ports:
+      - "${APPOINTMENTS_SERVICE_PORT}:${APPOINTMENTS_SERVICE_PORT}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - medi-sync-network
+
+networks:
+  medi-sync-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
+  rabbitmq-data:
+    driver: local

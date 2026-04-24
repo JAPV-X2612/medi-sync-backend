@@ -1,0 +1,109 @@
+{
+  "version": "1.0.0",
+  "exchange": "medi-sync.commands",
+  "exchangeType": "direct",
+  "commands": [
+    {
+      "name": "command.auth.register-account",
+      "description": "Register a new user account in the auth system",
+      "actor": "Patient",
+      "targetService": "auth-service",
+      "payload": {
+        "email": "string",
+        "password": "string",
+        "role": "string"
+      }
+    },
+    {
+      "name": "command.appointments.select-time-slot",
+      "description": "Select an available time slot for booking",
+      "actor": "Patient",
+      "targetService": "appointments-service",
+      "payload": {
+        "doctorId": "string",
+        "slotStart": "DateTime",
+        "slotEnd": "DateTime"
+      }
+    },
+    {
+      "name": "command.appointments.request-appointment",
+      "description": "Request a new appointment with a doctor",
+      "actor": "Patient",
+      "targetService": "appointments-service",
+      "payload": {
+        "patientId": "string",
+        "doctorId": "string",
+        "slotStart": "DateTime",
+        "slotEnd": "DateTime",
+        "reason": "string"
+      }
+    },
+    {
+      "name": "command.appointments.confirm-appointment",
+      "description": "Confirm a pending appointment",
+      "actor": "Booking System",
+      "targetService": "appointments-service",
+      "payload": {
+        "appointmentId": "string",
+        "confirmedBy": "string"
+      }
+    },
+    {
+      "name": "command.notifications.send-confirmation-email",
+      "description": "Send a confirmation email after appointment is confirmed",
+      "actor": "Notification Service",
+      "targetService": "notifications-service",
+      "payload": {
+        "appointmentId": "string",
+        "patientEmail": "string",
+        "appointmentDate": "DateTime",
+        "doctorName": "string"
+      }
+    },
+    {
+      "name": "command.appointments.reschedule-appointment",
+      "description": "Reschedule an existing appointment to a new time",
+      "actor": "Patient",
+      "targetService": "appointments-service",
+      "payload": {
+        "appointmentId": "string",
+        "newSlotStart": "DateTime",
+        "newSlotEnd": "DateTime",
+        "reason": "string"
+      }
+    },
+    {
+      "name": "command.appointments.cancel-appointment",
+      "description": "Cancel an existing appointment",
+      "actor": "Patient",
+      "targetService": "appointments-service",
+      "payload": {
+        "appointmentId": "string",
+        "reason": "string"
+      }
+    },
+    {
+      "name": "command.notifications.send-reminder",
+      "description": "Send a reminder notification before an appointment",
+      "actor": "Scheduler",
+      "targetService": "notifications-service",
+      "payload": {
+        "appointmentId": "string",
+        "patientId": "string",
+        "reminderType": "string",
+        "appointmentDate": "DateTime"
+      }
+    },
+    {
+      "name": "command.appointments.complete-appointment",
+      "description": "Mark an appointment as completed",
+      "actor": "Doctor",
+      "targetService": "appointments-service",
+      "payload": {
+        "appointmentId": "string",
+        "doctorId": "string",
+        "notes": "string"
+      }
+    }
+  ]
+}

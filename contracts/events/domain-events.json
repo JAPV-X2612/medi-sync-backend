@@ -1,0 +1,145 @@
+{
+  "version": "1.0.0",
+  "exchange": "medi-sync.events",
+  "exchangeType": "topic",
+  "events": [
+    {
+      "name": "event.patient.registered",
+      "description": "A new patient has been registered in the system",
+      "source": "patient-service",
+      "consumers": ["auth-service", "appointments-service"],
+      "payload": {
+        "patientId": "string",
+        "name": "string",
+        "email": "string",
+        "phone": "string",
+        "createdAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.doctor.profile-created",
+      "description": "A new doctor profile has been created",
+      "source": "doctor-service",
+      "consumers": ["appointments-service"],
+      "payload": {
+        "doctorId": "string",
+        "name": "string",
+        "specialty": "string",
+        "createdAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.appointment.requested",
+      "description": "A patient has requested a new appointment",
+      "source": "appointments-service",
+      "consumers": ["doctor-service", "patient-service"],
+      "payload": {
+        "appointmentId": "string",
+        "patientId": "string",
+        "doctorId": "string",
+        "requestedSlot": "DateTime",
+        "status": "string",
+        "requestedAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.timeslot.reserved",
+      "description": "A time slot has been reserved for an appointment",
+      "source": "appointments-service",
+      "consumers": ["doctor-service"],
+      "payload": {
+        "doctorId": "string",
+        "slotStart": "DateTime",
+        "slotEnd": "DateTime",
+        "appointmentId": "string",
+        "reservedAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.appointment.confirmed",
+      "description": "An appointment has been confirmed by the system or doctor",
+      "source": "appointments-service",
+      "consumers": ["patient-service", "doctor-service"],
+      "payload": {
+        "appointmentId": "string",
+        "patientId": "string",
+        "doctorId": "string",
+        "scheduledAt": "DateTime",
+        "confirmedAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.notification.confirmation-email-sent",
+      "description": "A confirmation email has been sent to the patient",
+      "source": "notifications-service",
+      "consumers": ["appointments-service"],
+      "payload": {
+        "appointmentId": "string",
+        "patientEmail": "string",
+        "sentAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.appointment.rescheduled",
+      "description": "An existing appointment has been rescheduled to a new time",
+      "source": "appointments-service",
+      "consumers": ["patient-service", "doctor-service"],
+      "payload": {
+        "appointmentId": "string",
+        "patientId": "string",
+        "doctorId": "string",
+        "previousSlot": "DateTime",
+        "newSlot": "DateTime",
+        "rescheduledAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.appointment.cancelled",
+      "description": "An appointment has been cancelled",
+      "source": "appointments-service",
+      "consumers": ["patient-service", "doctor-service"],
+      "payload": {
+        "appointmentId": "string",
+        "patientId": "string",
+        "doctorId": "string",
+        "reason": "string",
+        "cancelledAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.notification.reminder-sent",
+      "description": "A reminder notification has been sent before an appointment",
+      "source": "notifications-service",
+      "consumers": ["appointments-service"],
+      "payload": {
+        "appointmentId": "string",
+        "patientId": "string",
+        "reminderType": "string",
+        "sentAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.patient.checked-in",
+      "description": "A patient has checked in for their appointment",
+      "source": "patient-service",
+      "consumers": ["appointments-service", "doctor-service"],
+      "payload": {
+        "patientId": "string",
+        "appointmentId": "string",
+        "checkedInAt": "DateTime"
+      }
+    },
+    {
+      "name": "event.appointment.completed",
+      "description": "An appointment has been completed by the doctor",
+      "source": "appointments-service",
+      "consumers": ["patient-service", "doctor-service"],
+      "payload": {
+        "appointmentId": "string",
+        "patientId": "string",
+        "doctorId": "string",
+        "completedAt": "DateTime"
+      }
+    }
+  ]
+}
