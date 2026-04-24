@@ -47,10 +47,11 @@ services:
   # MICROSERVICES 
 
   auth-service:
-    image: node:20-alpine
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
     container_name: medisync-auth-service
     restart: unless-stopped
-    command: sh -c "echo 'auth-service placeholder - waiting for implementation' && sleep infinity"
     environment:
       PORT: ${AUTH_SERVICE_PORT}
       RABBITMQ_HOST: ${RABBITMQ_HOST}
@@ -75,10 +76,11 @@ services:
       - medi-sync-network
 
   patient-service:
-    image: node:20-alpine
+    build:
+      context: ./services/patient-service
+      dockerfile: Dockerfile
     container_name: medisync-patient-service
     restart: unless-stopped
-    command: sh -c "echo 'patient-service placeholder - waiting for implementation' && sleep infinity"
     environment:
       PORT: ${PATIENT_SERVICE_PORT}
       RABBITMQ_HOST: ${RABBITMQ_HOST}
@@ -103,10 +105,11 @@ services:
       - medi-sync-network
 
   doctor-service:
-    image: node:20-alpine
+    build:
+      context: ./services/doctor-service
+      dockerfile: Dockerfile
     container_name: medisync-doctor-service
     restart: unless-stopped
-    command: sh -c "echo 'doctor-service placeholder - waiting for implementation' && sleep infinity"
     environment:
       PORT: ${DOCTOR_SERVICE_PORT}
       RABBITMQ_HOST: ${RABBITMQ_HOST}
@@ -131,10 +134,11 @@ services:
       - medi-sync-network
 
   appointments-service:
-    image: node:20-alpine
+    build:
+      context: ./services/appointments-service
+      dockerfile: Dockerfile
     container_name: medisync-appointments-service
     restart: unless-stopped
-    command: sh -c "echo 'appointments-service placeholder - waiting for implementation' && sleep infinity"
     environment:
       PORT: ${APPOINTMENTS_SERVICE_PORT}
       RABBITMQ_HOST: ${RABBITMQ_HOST}
