@@ -152,6 +152,11 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASS}
       EVENTS_EXCHANGE: ${EVENTS_EXCHANGE}
       COMMANDS_EXCHANGE: ${COMMANDS_EXCHANGE}
+      SMTP_HOST: ${SMTP_HOST:-smtp.ethereal.email}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-no-reply@medisync.local}
     ports:
       - "${APPOINTMENTS_SERVICE_PORT}:${APPOINTMENTS_SERVICE_PORT}"
     depends_on:
@@ -159,6 +164,28 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+    networks:
+      - medi-sync-network
+
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    container_name: medisync-api-gateway
+    restart: unless-stopped
+    environment:
+      PORT: ${API_GATEWAY_PORT:-3000}
+      NODE_ENV: ${NODE_ENV:-production}
+      PATIENT_SERVICE_URL: http://patient-service:${PATIENT_SERVICE_PORT}
+      DOCTOR_SERVICE_URL: http://doctor-service:${DOCTOR_SERVICE_PORT}
+      APPOINTMENTS_SERVICE_URL: http://appointments-service:${APPOINTMENTS_SERVICE_PORT}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+    ports:
+      - "${API_GATEWAY_PORT:-3000}:${API_GATEWAY_PORT:-3000}"
+    depends_on:
+      - patient-service
+      - doctor-service
+      - appointments-service
     networks:
       - medi-sync-network
 
