@@ -1,1 +1,0 @@
-# medi-sync-backend
