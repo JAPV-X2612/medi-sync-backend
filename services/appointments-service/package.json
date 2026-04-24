@@ -66,19 +66,24 @@
   },
   "jest": {
     "moduleFileExtensions": ["js", "json", "ts"],
-    "rootDir": "src",
+    "rootDir": ".",
+    "roots": ["<rootDir>/src", "<rootDir>/tests"],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": { "^.+\\.(t|j)s$": ["ts-jest", { "isolatedModules": true }] },
+    "setupFiles": ["reflect-metadata"],
     "collectCoverageFrom": [
-      "**/*.(t|j)s",
-      "!**/*.spec.ts",
-      "!**/*.e2e-spec.ts",
-      "!**/main.ts",
-      "!**/*.module.ts",
-      "!**/*.d.ts"
+      "src/**/*.(t|j)s",
+      "!src/**/*.spec.ts",
+      "!src/**/*.e2e-spec.ts",
+      "!src/**/main.ts",
+      "!src/**/*.module.ts",
+      "!src/**/*.d.ts",
+      "!src/**/infrastructure/**",
+      "!src/app.controller.ts",
+      "!src/app.service.ts"
     ],
     "coverageReporters": ["lcov", "text-summary"],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "./coverage",
     "testEnvironment": "node"
   }
 }
