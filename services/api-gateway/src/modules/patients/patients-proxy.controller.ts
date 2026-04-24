@@ -1,10 +1,4 @@
-import {
-  All,
-  Controller,
-  Inject,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { All, Controller, Inject, Req, Res } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
@@ -18,7 +12,7 @@ import { AxiosError } from 'axios';
  * @version 1.0
  * @since 2026-04-20
  */
-@Controller('patients')
+@Controller()
 export class PatientsProxyController {
   private readonly baseUrl: string;
 
@@ -29,9 +23,18 @@ export class PatientsProxyController {
     this.baseUrl = this.config.get<string>('PATIENT_SERVICE_URL', 'http://localhost:3002');
   }
 
-  @All('*path')
-  async proxy(@Req() req: Request, @Res() res: Response): Promise<void> {
-    const targetUrl = `${this.baseUrl}/patients${req.params['path'] ? `/${req.params['path']}` : ''}`;
+  @All('patients/*path')
+  proxyPatients(@Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.forward(req, res);
+  }
+
+  @All('patients')
+  proxyPatientsRoot(@Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.forward(req, res);
+  }
+
+  private async forward(req: Request, res: Response): Promise<void> {
+    const targetUrl = `${this.baseUrl}${req.path}`;
     const queryString = req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '';
 
     try {
