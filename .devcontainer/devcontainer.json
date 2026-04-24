@@ -1,0 +1,86 @@
+{
+  "name": "MediSync — NestJS Microservices",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootDocker": "true",
+      "moby": "true"
+    }
+  },
+
+  "forwardPorts": [3000, 3001, 3002, 3003, 3004, 5432, 5672, 15672],
+  "portsAttributes": {
+    "3000": {
+      "label": "API Gateway",
+      "onAutoForward": "notify"
+    },
+    "3001": {
+      "label": "Auth Service",
+      "onAutoForward": "silent"
+    },
+    "3002": {
+      "label": "Patient Service",
+      "onAutoForward": "notify"
+    },
+    "3003": {
+      "label": "Doctor Service",
+      "onAutoForward": "notify"
+    },
+    "3004": {
+      "label": "Appointments Service",
+      "onAutoForward": "notify"
+    },
+    "5432": {
+      "label": "PostgreSQL",
+      "onAutoForward": "silent"
+    },
+    "5672": {
+      "label": "RabbitMQ AMQP",
+      "onAutoForward": "silent"
+    },
+    "15672": {
+      "label": "RabbitMQ Management UI",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-json",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "eamodio.gitlens",
+        "christian-kohler.path-intellisense",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "editor.tabSize": 2,
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "typescript.updateImportsOnFileMove.enabled": "always",
+        "eslint.validate": ["typescript"],
+        "files.exclude": {
+          "**/node_modules": true,
+          "**/dist": true,
+          "**/coverage": true
+        }
+      }
+    }
+  },
+
+  "postCreateCommand": "cp .env.example .env && for svc in services/*/; do echo \"Installing deps: $svc\" && npm install --prefix $svc; done && echo '--- Environment Ready ---' && node --version && npm --version && docker --version && docker compose version",
+
+  "remoteUser": "vscode"
+}
