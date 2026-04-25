@@ -2,9 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  APPOINTMENT_REPOSITORY,
-} from './domain/repositories/appointment.repository';
+import { APPOINTMENT_REPOSITORY } from './domain/repositories/appointment.repository';
 import { EMAIL_NOTIFICATION } from './application/ports/email-notification.port';
 import { EVENT_PUBLISHER } from './application/ports/event-publisher.port';
 import { CancelAppointmentUseCase } from './application/use-cases/cancel-appointment/cancel-appointment.use-case';
@@ -46,6 +44,7 @@ import { AppointmentsController } from './presentation/http/appointments.control
           const host = config.get<string>('RABBITMQ_HOST', 'localhost');
           const port = config.get<number>('RABBITMQ_PORT', 5672);
           const protocol = config.get<string>('RABBITMQ_PROTOCOL', 'amqp');
+          const vhost = config.get<string>('RABBITMQ_VHOST', '');
           const exchange = config.get<string>(
             'EVENTS_EXCHANGE',
             'medi-sync.events',
@@ -53,7 +52,9 @@ import { AppointmentsController } from './presentation/http/appointments.control
           return {
             transport: Transport.RMQ,
             options: {
-              urls: [`${protocol}://${user}:${pass}@${host}:${port}`],
+              urls: [
+                `${protocol}://${user}:${pass}@${host}:${port}${vhost ? `/${vhost}` : ''}`,
+              ],
               queue: 'appointments-service-publisher',
               exchange,
               exchangeType: 'topic',
@@ -65,7 +66,11 @@ import { AppointmentsController } from './presentation/http/appointments.control
       },
     ]),
   ],
-  controllers: [AppointmentsController, PatientEventHandler, DoctorEventHandler],
+  controllers: [
+    AppointmentsController,
+    PatientEventHandler,
+    DoctorEventHandler,
+  ],
   providers: [
     RequestAppointmentUseCase,
     ConfirmAppointmentUseCase,

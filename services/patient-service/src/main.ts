@@ -17,7 +17,8 @@ async function bootstrap(): Promise<void> {
   const config = app.get(ConfigService);
 
   const rabbitmqProtocol = config.get<string>('RABBITMQ_PROTOCOL', 'amqp');
-  const rabbitmqUrl = `${rabbitmqProtocol}://${config.get('RABBITMQ_USER')}:${config.get('RABBITMQ_PASS')}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}`;
+  const rabbitmqVhost = config.get<string>('RABBITMQ_VHOST', '');
+  const rabbitmqUrl = `${rabbitmqProtocol}://${config.get('RABBITMQ_USER')}:${config.get('RABBITMQ_PASS')}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}${rabbitmqVhost ? `/${rabbitmqVhost}` : ''}`;
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
