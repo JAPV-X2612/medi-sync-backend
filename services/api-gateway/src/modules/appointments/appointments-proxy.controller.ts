@@ -12,7 +12,7 @@ import { AxiosError } from 'axios';
  * @version 1.0
  * @since 2026-04-20
  */
-@Controller('appointments')
+@Controller()
 export class AppointmentsProxyController {
   private readonly baseUrl: string;
 
@@ -26,8 +26,17 @@ export class AppointmentsProxyController {
     );
   }
 
-  @All('*path')
-  async proxy(@Req() req: Request, @Res() res: Response): Promise<void> {
+  @All('appointments/*path')
+  proxyAppointments(@Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.forward(req, res);
+  }
+
+  @All('appointments')
+  proxyAppointmentsRoot(@Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.forward(req, res);
+  }
+
+  private async forward(req: Request, res: Response): Promise<void> {
     const targetUrl = `${this.baseUrl}${req.path}`;
     const queryString = req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '';
 
