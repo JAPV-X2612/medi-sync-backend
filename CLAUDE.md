@@ -5,6 +5,41 @@ It provides all the context, conventions, and guardrails needed to work on this 
 
 ---
 
+## AI Development Structure
+
+This project uses **Specification-Driven Development (SDD)**. Key directories:
+
+| Path | Purpose |
+|---|---|
+| `.ai/AGENTS.md` | Universal context — readable by any AI agent |
+| `.ai/config.yaml` | Project config: stack, conventions, authors |
+| `.ai/skills/` | Reusable prompt templates (see slash commands below) |
+| `.ai/hooks/` | Automation scripts (lint + typecheck on edit, guards on commit) |
+| `specs/features/` | Gherkin acceptance criteria — **read before implementing any feature** |
+
+### Slash commands available in this session
+
+| Command | When to use |
+|---|---|
+| `/clean-code` | Apply SOLID, naming, and code smell rules |
+| `/testing` | Write or improve tests following AAA + Gherkin mapping |
+| `/git-workflow` | Draft commits, branch names, and PR descriptions |
+| `/code-review` | Full checklist review of the current changes |
+| `/api-design` | Design or review REST endpoints, DTOs, and Swagger |
+| `/documentation` | Write JSDoc, README sections, or inline comments |
+
+### SDD workflow
+
+```
+1. Read specs/features/<US-XXX>.feature   ← acceptance criteria
+2. /clean-code or /api-design              ← load the right skill
+3. Implement                               ← hooks run lint + typecheck automatically
+4. /testing                                ← write tests mapping Gherkin scenarios
+5. /code-review                            ← verify before committing
+```
+
+---
+
 ## Project Overview
 
 **Project:** MediSync — Medical Appointment Management System  
