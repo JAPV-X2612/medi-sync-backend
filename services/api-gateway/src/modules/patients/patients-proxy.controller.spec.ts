@@ -37,7 +37,7 @@ describe('PatientsProxyController', () => {
     mockHttpService.request.mockReturnValue(of({ status: 200, data: [{ id: 'pat-1' }] }));
 
     // Act
-    await controller.proxyPatientsRoot(mockReq, mockRes);
+    await controller.findAll(mockReq, mockRes);
 
     // Assert
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -51,7 +51,7 @@ describe('PatientsProxyController', () => {
     mockReq.url = '/patients/pat-1';
 
     // Act
-    await controller.proxyPatients(mockReq, mockRes);
+    await controller.findById(mockReq, mockRes);
 
     // Assert
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -64,7 +64,7 @@ describe('PatientsProxyController', () => {
     mockReq.path = '/patients';
 
     // Act
-    await controller.proxyPatientsRoot(mockReq, mockRes);
+    await controller.findAll(mockReq, mockRes);
 
     // Assert
     expect(mockHttpService.request).toHaveBeenCalledWith(
@@ -78,7 +78,7 @@ describe('PatientsProxyController', () => {
     mockHttpService.request.mockReturnValue(throwError(() => axiosError));
 
     // Act
-    await controller.proxyPatientsRoot(mockReq, mockRes);
+    await controller.findAll(mockReq, mockRes);
 
     // Assert
     expect(mockRes.status).toHaveBeenCalledWith(404);
@@ -90,7 +90,7 @@ describe('PatientsProxyController', () => {
     mockHttpService.request.mockReturnValue(throwError(() => new Error('ECONNREFUSED')));
 
     // Act
-    await controller.proxyPatientsRoot(mockReq, mockRes);
+    await controller.findAll(mockReq, mockRes);
 
     // Assert
     expect(mockRes.status).toHaveBeenCalledWith(502);

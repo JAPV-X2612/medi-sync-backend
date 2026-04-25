@@ -1,17 +1,19 @@
-import { All, Controller, Inject, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Post, Put, Req, Res } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { firstValueFrom } from 'rxjs';
 import { AxiosError } from 'axios';
 
 /**
- * Proxies all /doctors/** and /specialties/** and /schedules/** requests to the doctor-service.
+ * Proxies all /doctors/** requests to the doctor-service.
  *
  * @authors Andrés Chavarro, Jesús Pinzón, Laura Rodríguez, Sergio Bejarano
  * @version 1.0
  * @since 2026-04-20
  */
+@ApiTags('doctors')
 @Controller()
 export class DoctorsProxyController {
   private readonly baseUrl: string;
@@ -23,33 +25,93 @@ export class DoctorsProxyController {
     this.baseUrl = this.config.get<string>('DOCTOR_SERVICE_URL', 'http://localhost:3003');
   }
 
-  @All('doctors/*path')
-  proxyDoctors(@Req() req: Request, @Res() res: Response): Promise<void> {
+  @Post('doctors')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Create a doctor profile' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['firstName', 'lastName', 'email', 'phone', 'licenseNumber', 'specialtyId'],
+      properties: {
+        firstName: { type: 'string', maxLength: 100, example: 'Maria' },
+        lastName: { type: 'string', maxLength: 100, example: 'Garcia' },
+        email: { type: 'string', maxLength: 150, example: 'maria.garcia@clinic.com' },
+        phone: { type: 'string', maxLength: 20, example: '+57-310-987-6543' },
+        licenseNumber: { type: 'string', maxLength: 50, example: 'MED-2024-001' },
+        bio: { type: 'string', maxLength: 500, example: 'Cardiologist with 10 years of experience.' },
+        specialtyId: { type: 'string', format: 'uuid', example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901' },
+      },
+    },
+  })
+  @ApiResponse({ status: 201, description: 'Doctor profile created.' })
+  @ApiResponse({ status: 400, description: 'Validation error.' })
+  @ApiResponse({ status: 404, description: 'Specialty not found.' })
+  create(@Req() req: Request, @Res() res: Response): Promise<void> {
     return this.forward(req, res);
   }
 
-  @All('doctors')
-  proxyDoctorsRoot(@Req() req: Request, @Res() res: Response): Promise<void> {
+  @Get('doctors')
+  @ApiOperation({ summary: 'List all doctors' })
+  @ApiResponse({ status: 200, description: 'Array of doctor profiles.' })
+  findAll(@Req() req: Request, @Res() res: Response): Promise<void> {
     return this.forward(req, res);
   }
 
-  @All('specialties/*path')
-  proxySpecialties(@Req() req: Request, @Res() res: Response): Promise<void> {
+  @Get('doctors/specialty/:specialtyId')
+  @ApiOperation({ summary: 'List doctors by specialty' })
+  @ApiParam({ name: 'specialtyId', description: 'Specialty UUID', example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901' })
+  @ApiResponse({ status: 200, description: 'Array of doctors in the given specialty.' })
+  @ApiResponse({ status: 404, description: 'Specialty not found.' })
+  findBySpecialty(@Req() req: Request, @Res() res: Response): Promise<void> {
     return this.forward(req, res);
   }
 
-  @All('specialties')
-  proxySpecialtiesRoot(@Req() req: Request, @Res() res: Response): Promise<void> {
+  @Get('doctors/:id')
+  @ApiOperation({ summary: 'Get a doctor by ID' })
+  @ApiParam({ name: 'id', description: 'Doctor UUID', example: 'c3d4e5f6-a7b8-9012-cdef-123456789012' })
+  @ApiResponse({ status: 200, description: 'Doctor profile found.' })
+  @ApiResponse({ status: 404, description: 'Doctor not found.' })
+  findById(@Req() req: Request, @Res() res: Response): Promise<void> {
     return this.forward(req, res);
   }
 
-  @All('schedules/*path')
-  proxySchedules(@Req() req: Request, @Res() res: Response): Promise<void> {
+  @Put('doctors/:id')
+  @ApiOperation({ summary: 'Update a doctor profile' })
+  @ApiParam({ name: 'id', description: 'Doctor UUID', example: 'c3d4e5f6-a7b8-9012-cdef-123456789012' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        firstName: { type: 'string', maxLength: 100, example: 'Maria' },
+        lastName: { type: 'string', maxLength: 100, example: 'Garcia' },
+        phone: { type: 'string', maxLength: 20, example: '+57-310-987-6543' },
+        bio: { type: 'string', maxLength: 500, example: 'Updated biography.' },
+        specialtyId: { type: 'string', format: 'uuid', example: 'b2c3d4e5-f6a7-8901-bcde-f12345678901' },
+      },
+    },
+  })
+  @ApiResponse({ status: 200, description: 'Doctor profile updated.' })
+  @ApiResponse({ status: 404, description: 'Doctor not found.' })
+  update(@Req() req: Request, @Res() res: Response): Promise<void> {
     return this.forward(req, res);
   }
 
-  @All('schedules')
-  proxySchedulesRoot(@Req() req: Request, @Res() res: Response): Promise<void> {
+  @Delete('doctors/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Remove a doctor profile' })
+  @ApiParam({ name: 'id', description: 'Doctor UUID', example: 'c3d4e5f6-a7b8-9012-cdef-123456789012' })
+  @ApiResponse({ status: 204, description: 'Doctor deleted.' })
+  @ApiResponse({ status: 404, description: 'Doctor not found.' })
+  remove(@Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.forward(req, res);
+  }
+
+  @Get('doctors/:id/schedules')
+  @ApiOperation({ summary: "List a doctor's schedules" })
+  @ApiParam({ name: 'id', description: 'Doctor UUID', example: 'c3d4e5f6-a7b8-9012-cdef-123456789012' })
+  @ApiResponse({ status: 200, description: 'Array of schedule slots.' })
+  @ApiResponse({ status: 404, description: 'Doctor not found.' })
+  getSchedules(@Req() req: Request, @Res() res: Response): Promise<void> {
     return this.forward(req, res);
   }
 

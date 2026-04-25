@@ -1,8 +1,10 @@
 import { of, throwError } from 'rxjs';
 import { DoctorsProxyController } from './doctors-proxy.controller';
+import { SpecialtiesProxyController } from './specialties-proxy.controller';
+import { SchedulesProxyController } from './schedules-proxy.controller';
 
 /**
- * Unit tests for DoctorsProxyController.
+ * Unit tests for doctors-service proxy controllers (doctors, specialties, schedules).
  *
  * @authors Andrés Chavarro, Jesús Pinzón, Laura Rodríguez, Sergio Bejarano
  * @version 1.0
@@ -37,7 +39,7 @@ describe('DoctorsProxyController', () => {
     mockHttpService.request.mockReturnValue(of({ status: 200, data: [{ id: 'doc-1' }] }));
 
     // Act
-    await controller.proxyDoctorsRoot(mockReq, mockRes);
+    await controller.findAll(mockReq, mockRes);
 
     // Assert
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -51,59 +53,7 @@ describe('DoctorsProxyController', () => {
     mockReq.url = '/doctors/doc-1';
 
     // Act
-    await controller.proxyDoctors(mockReq, mockRes);
-
-    // Assert
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
-
-  it('should proxy specialties root', async () => {
-    // Arrange
-    mockHttpService.request.mockReturnValue(of({ status: 200, data: [] }));
-    mockReq.path = '/specialties';
-    mockReq.url = '/specialties';
-
-    // Act
-    await controller.proxySpecialtiesRoot(mockReq, mockRes);
-
-    // Assert
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
-
-  it('should proxy specialties with path segment', async () => {
-    // Arrange
-    mockHttpService.request.mockReturnValue(of({ status: 200, data: { id: 'spec-1' } }));
-    mockReq.path = '/specialties/spec-1';
-    mockReq.url = '/specialties/spec-1';
-
-    // Act
-    await controller.proxySpecialties(mockReq, mockRes);
-
-    // Assert
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
-
-  it('should proxy schedules root', async () => {
-    // Arrange
-    mockHttpService.request.mockReturnValue(of({ status: 200, data: [] }));
-    mockReq.path = '/schedules';
-    mockReq.url = '/schedules';
-
-    // Act
-    await controller.proxySchedulesRoot(mockReq, mockRes);
-
-    // Assert
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
-
-  it('should proxy schedules with path segment', async () => {
-    // Arrange
-    mockHttpService.request.mockReturnValue(of({ status: 200, data: { id: 'sched-1' } }));
-    mockReq.path = '/schedules/sched-1';
-    mockReq.url = '/schedules/sched-1';
-
-    // Act
-    await controller.proxySchedules(mockReq, mockRes);
+    await controller.findById(mockReq, mockRes);
 
     // Assert
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -115,7 +65,7 @@ describe('DoctorsProxyController', () => {
     mockHttpService.request.mockReturnValue(throwError(() => axiosError));
 
     // Act
-    await controller.proxyDoctorsRoot(mockReq, mockRes);
+    await controller.findAll(mockReq, mockRes);
 
     // Assert
     expect(mockRes.status).toHaveBeenCalledWith(404);
@@ -127,7 +77,7 @@ describe('DoctorsProxyController', () => {
     mockHttpService.request.mockReturnValue(throwError(() => new Error('ECONNREFUSED')));
 
     // Act
-    await controller.proxyDoctorsRoot(mockReq, mockRes);
+    await controller.findAll(mockReq, mockRes);
 
     // Assert
     expect(mockRes.status).toHaveBeenCalledWith(502);
@@ -143,11 +93,132 @@ describe('DoctorsProxyController', () => {
     mockReq.path = '/doctors';
 
     // Act
-    await controller.proxyDoctorsRoot(mockReq, mockRes);
+    await controller.findAll(mockReq, mockRes);
 
     // Assert
     expect(mockHttpService.request).toHaveBeenCalledWith(
       expect.objectContaining({ url: expect.stringContaining('?specialtyId=spec-1') }),
     );
+  });
+});
+
+describe('SpecialtiesProxyController', () => {
+  let controller: SpecialtiesProxyController;
+  let mockHttpService: { request: jest.Mock };
+  let mockReq: any;
+  let mockRes: any;
+
+  beforeEach(() => {
+    mockHttpService = { request: jest.fn() };
+    const mockConfig = { get: jest.fn().mockReturnValue('http://localhost:3003') };
+    controller = new SpecialtiesProxyController(mockHttpService as any, mockConfig as any);
+
+    mockReq = {
+      method: 'GET',
+      url: '/specialties',
+      path: '/specialties',
+      body: {},
+      headers: { 'content-type': 'application/json' },
+    };
+    mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+  });
+
+  it('should proxy specialties root', async () => {
+    // Arrange
+    mockHttpService.request.mockReturnValue(of({ status: 200, data: [] }));
+
+    // Act
+    await controller.findAll(mockReq, mockRes);
+
+    // Assert
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should proxy POST specialties', async () => {
+    // Arrange
+    mockHttpService.request.mockReturnValue(of({ status: 201, data: { id: 'spec-1', name: 'Cardiology' } }));
+    mockReq.method = 'POST';
+    mockReq.body = { name: 'Cardiology' };
+
+    // Act
+    await controller.create(mockReq, mockRes);
+
+    // Assert
+    expect(mockRes.status).toHaveBeenCalledWith(201);
+  });
+
+  it('should return 502 when doctor-service is unreachable', async () => {
+    // Arrange
+    mockHttpService.request.mockReturnValue(throwError(() => new Error('ECONNREFUSED')));
+
+    // Act
+    await controller.findAll(mockReq, mockRes);
+
+    // Assert
+    expect(mockRes.status).toHaveBeenCalledWith(502);
+  });
+});
+
+describe('SchedulesProxyController', () => {
+  let controller: SchedulesProxyController;
+  let mockHttpService: { request: jest.Mock };
+  let mockReq: any;
+  let mockRes: any;
+
+  beforeEach(() => {
+    mockHttpService = { request: jest.fn() };
+    const mockConfig = { get: jest.fn().mockReturnValue('http://localhost:3003') };
+    controller = new SchedulesProxyController(mockHttpService as any, mockConfig as any);
+
+    mockReq = {
+      method: 'POST',
+      url: '/schedules',
+      path: '/schedules',
+      body: { doctorId: 'doc-1', dayOfWeek: 1, startTime: '08:00', endTime: '12:00', slotDurationMin: 30 },
+      headers: { 'content-type': 'application/json' },
+    };
+    mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+  });
+
+  it('should proxy POST schedules', async () => {
+    // Arrange
+    mockHttpService.request.mockReturnValue(of({ status: 201, data: { id: 'sched-1' } }));
+
+    // Act
+    await controller.create(mockReq, mockRes);
+
+    // Assert
+    expect(mockRes.status).toHaveBeenCalledWith(201);
+  });
+
+  it('should proxy DELETE schedule by id', async () => {
+    // Arrange
+    mockHttpService.request.mockReturnValue(of({ status: 204, data: null }));
+    mockReq.method = 'DELETE';
+    mockReq.path = '/schedules/sched-1';
+    mockReq.url = '/schedules/sched-1';
+
+    // Act
+    await controller.remove(mockReq, mockRes);
+
+    // Assert
+    expect(mockRes.status).toHaveBeenCalledWith(204);
+  });
+
+  it('should return 502 when doctor-service is unreachable', async () => {
+    // Arrange
+    mockHttpService.request.mockReturnValue(throwError(() => new Error('ECONNREFUSED')));
+
+    // Act
+    await controller.create(mockReq, mockRes);
+
+    // Assert
+    expect(mockRes.status).toHaveBeenCalledWith(502);
   });
 });

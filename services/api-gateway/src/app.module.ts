@@ -4,6 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { AppointmentsProxyController } from './modules/appointments/appointments-proxy.controller';
 import { DoctorsProxyController } from './modules/doctors/doctors-proxy.controller';
+import { SchedulesProxyController } from './modules/doctors/schedules-proxy.controller';
+import { SpecialtiesProxyController } from './modules/doctors/specialties-proxy.controller';
 import { PatientsProxyController } from './modules/patients/patients-proxy.controller';
 
 /**
@@ -35,6 +37,8 @@ import { PatientsProxyController } from './modules/patients/patients-proxy.contr
   controllers: [
     PatientsProxyController,
     DoctorsProxyController,
+    SpecialtiesProxyController,
+    SchedulesProxyController,
     AppointmentsProxyController,
   ],
 })
