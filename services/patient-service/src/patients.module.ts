@@ -37,7 +37,7 @@ import { PatientsController } from './presentation/http/patients.controller';
           transport: Transport.RMQ,
           options: {
             urls: [
-              `${config.get('RABBITMQ_PROTOCOL', 'amqp')}://${config.get('RABBITMQ_USER')}:${config.get('RABBITMQ_PASS')}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}`,
+              `${config.get('RABBITMQ_PROTOCOL', 'amqp')}://${config.get('RABBITMQ_USER')}:${config.get('RABBITMQ_PASS')}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}${config.get('RABBITMQ_VHOST', '') ? `/${config.get('RABBITMQ_VHOST')}` : ''}`,
             ],
             queue: config.get<string>('EVENTS_EXCHANGE', 'medi-sync.events'),
             queueOptions: { durable: true },

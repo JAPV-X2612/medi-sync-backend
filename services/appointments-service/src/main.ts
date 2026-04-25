@@ -17,17 +17,18 @@ async function bootstrap(): Promise<void> {
   const config = app.get(ConfigService);
 
   const rabbitmqProtocol = config.get<string>('RABBITMQ_PROTOCOL', 'amqp');
-  const rabbitmqUser = config.get<string>('RABBITMQ_USER', 'guest');
-  const rabbitmqPass = config.get<string>('RABBITMQ_PASS', 'guest');
-  const rabbitmqHost = config.get<string>('RABBITMQ_HOST', 'localhost');
-  const rabbitmqPort = config.get<number>('RABBITMQ_PORT', 5672);
+  const rabbitmqUser   = config.get<string>('RABBITMQ_USER', 'guest');
+  const rabbitmqPass   = config.get<string>('RABBITMQ_PASS', 'guest');
+  const rabbitmqHost   = config.get<string>('RABBITMQ_HOST', 'localhost');
+  const rabbitmqPort   = config.get<number>('RABBITMQ_PORT', 5672);
+  const rabbitmqVhost  = config.get<string>('RABBITMQ_VHOST', '');
   const exchange = config.get<string>('EVENTS_EXCHANGE', 'medi-sync.events');
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
       urls: [
-        `${rabbitmqProtocol}://${rabbitmqUser}:${rabbitmqPass}@${rabbitmqHost}:${rabbitmqPort}`,
+        `${rabbitmqProtocol}://${rabbitmqUser}:${rabbitmqPass}@${rabbitmqHost}:${rabbitmqPort}${rabbitmqVhost ? `/${rabbitmqVhost}` : ''}`,
       ],
       queue: 'appointments-service-queue',
       exchange,
