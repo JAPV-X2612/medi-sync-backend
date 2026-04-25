@@ -63,6 +63,10 @@ export class AppointmentTypeOrmRepository implements IAppointmentRepository {
     await this.ormRepository.delete(id);
   }
 
+  async existsById(id: string): Promise<boolean> {
+    return this.ormRepository.existsBy({ id });
+  }
+
   private toDomain(orm: AppointmentOrmEntity): Appointment {
     const primitives: AppointmentPrimitives = {
       id: orm.id,
