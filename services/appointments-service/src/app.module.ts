@@ -45,7 +45,9 @@ import { AppointmentsModule } from './appointments.module';
         password: config.get<string>('POSTGRES_PASS'),
         database: config.get<string>('POSTGRES_DB'),
         entities: [AppointmentOrmEntity],
-        synchronize: config.get<string>('NODE_ENV') !== 'production',
+        synchronize:
+          config.get<string>('NODE_ENV') !== 'production' ||
+          config.get<string>('TYPEORM_SYNCHRONIZE') === 'true',
         logging: config.get<string>('NODE_ENV') === 'development',
       }),
       inject: [ConfigService],

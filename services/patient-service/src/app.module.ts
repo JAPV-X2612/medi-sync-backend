@@ -44,7 +44,9 @@ import { PatientsModule } from './patients.module';
         username: config.get<string>('POSTGRES_USER'),
         password: config.get<string>('POSTGRES_PASS'),
         entities: [PatientOrmEntity],
-        synchronize: config.get<string>('NODE_ENV') !== 'production',
+        synchronize:
+          config.get<string>('NODE_ENV') !== 'production' ||
+          config.get<string>('TYPEORM_SYNCHRONIZE') === 'true',
         logging: config.get<string>('NODE_ENV') === 'development',
       }),
     }),
