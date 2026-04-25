@@ -1,0 +1,27 @@
+e301b81 | 2026-04-24 17:15:31 -0500 | LauraRo166 | feat: add initial test with coverage
+baf5a91 | 2026-04-24 19:46:53 -0500 | JAPV-X2612 | fix: Pipeline microservices deploy errors
+6ae60a7 | 2026-04-24 19:43:31 -0500 | JAPV-X2612 | build: Add temporary FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 environment variable
+cb6500f | 2026-04-24 19:39:15 -0500 | JAPV-X2612 | build: Update dependency versions
+6f07ce3 | 2026-04-24 19:38:45 -0500 | JAPV-X2612 | test: Update unit tests
+493d273 | 2026-04-24 19:34:18 -0500 | JAPV-X2612 | fix: GH actions pipeline errors
+ab624f9 | 2026-04-24 19:26:29 -0500 | JAPV-X2612 | feat: Update microservices dependencies
+b2a350f | 2026-04-24 19:26:05 -0500 | JAPV-X2612 | feat: Update microservices dependencies
+ab52801 | 2026-04-24 19:22:57 -0500 | JAPV-X2612 | feat: Update NEstJS dependencies
+b104597 | 2026-04-24 19:16:52 -0500 | JAPV-X2612 | feat: Add new CI/CD pipeline with GitHub Actions
+3eec720 | 2026-04-24 19:16:33 -0500 | JAPV-X2612 | feat: Add SonarCloud project config
+65fffdc | 2026-04-24 19:16:23 -0500 | JAPV-X2612 | feat: Add dependencies for unit tests
+81edbd3 | 2026-04-24 18:50:19 -0500 | JAPV-X2612 | feat: Add new files
+7f1efaa | 2026-04-24 18:47:06 -0500 | JAPV-X2612 | feat: Update current files
+085237c | 2026-04-24 18:25:55 -0500 | JAPV-X2612 | feat: Update .gitignore files
+85c6ae3 | 2026-04-24 18:21:26 -0500 | JAPV-X2612 | feat: Add new settings.json file for AIDLC with CLAUDE.md
+41c1cd1 | 2026-04-24 18:13:00 -0500 | JAPV-X2612 | feat: Add new settings.json file for AIDLC with CLAUDE.md
+d34959b | 2026-04-24 18:06:59 -0500 | JAPV-X2612 | feat: Update devcontainer.json file
+92d551c | 2026-04-24 18:05:53 -0500 | JAPV-X2612 | feat: Update .dockerignore files
+0cc6c2d | 2026-04-24 18:01:41 -0500 | JAPV-X2612 | feat: Update .gitignore file
+2b600cc | 2026-04-24 18:00:09 -0500 | JAPV-X2612 | feat: Update devcontainer.json file
+2afe25c | 2026-04-24 17:59:25 -0500 | JAPV-X2612 | docs: Update README.md file
+53aef35 | 2026-04-24 17:58:57 -0500 | JAPV-X2612 | feat: Add temporary files
+3409ad2 | 2026-04-24 15:37:46 -0500 | Andr3xDev | feat: add full docker definitions
+edc5c8a | 2026-04-24 15:18:38 -0500 | Andr3xDev | chore: add initial scaffold to each service
+2817008 | 2026-04-24 15:16:11 -0500 | Andr3xDev | feat: add initial compose to test events bus with some mock services
+7d34315 | 2026-04-18 11:39:40 -0500 | Jesús Pinzón | Initial commit
