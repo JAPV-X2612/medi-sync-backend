@@ -79,7 +79,7 @@
       "!src/**/main.ts",
       "!src/**/*.module.ts",
       "!src/**/*.d.ts",
-      "!src/**/infrastructure/**",
+      "!src/**/infrastructure/persistence/*.orm-entity.ts",
       "!src/app.controller.ts",
       "!src/app.service.ts"
     ],
