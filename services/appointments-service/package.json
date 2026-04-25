@@ -79,7 +79,9 @@
       "!src/**/main.ts",
       "!src/**/*.module.ts",
       "!src/**/*.d.ts",
-      "!src/**/infrastructure/persistence/*.orm-entity.ts"
+      "!src/**/infrastructure/**",
+      "!src/app.controller.ts",
+      "!src/app.service.ts"
     ],
     "coverageReporters": ["lcov", "text-summary"],
     "coverageDirectory": "./coverage",

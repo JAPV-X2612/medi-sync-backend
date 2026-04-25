@@ -15,7 +15,8 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
 
-  const rabbitmqUrl = `amqp://${config.get('RABBITMQ_USER')}:${config.get('RABBITMQ_PASS')}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}`;
+  const rabbitmqProtocol = config.get<string>('RABBITMQ_PROTOCOL', 'amqp');
+  const rabbitmqUrl = `${rabbitmqProtocol}://${config.get('RABBITMQ_USER')}:${config.get('RABBITMQ_PASS')}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}`;
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,

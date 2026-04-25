@@ -45,11 +45,15 @@ import { AppointmentsController } from './presentation/http/appointments.control
           const pass = config.get<string>('RABBITMQ_PASS', 'guest');
           const host = config.get<string>('RABBITMQ_HOST', 'localhost');
           const port = config.get<number>('RABBITMQ_PORT', 5672);
-          const exchange = config.get<string>('EVENTS_EXCHANGE', 'medi-sync.events');
+          const protocol = config.get<string>('RABBITMQ_PROTOCOL', 'amqp');
+          const exchange = config.get<string>(
+            'EVENTS_EXCHANGE',
+            'medi-sync.events',
+          );
           return {
             transport: Transport.RMQ,
             options: {
-              urls: [`amqp://${user}:${pass}@${host}:${port}`],
+              urls: [`${protocol}://${user}:${pass}@${host}:${port}`],
               queue: 'appointments-service-publisher',
               exchange,
               exchangeType: 'topic',

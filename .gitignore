@@ -154,3 +154,5 @@ tmp/
 # CLAUDE CODE
 # ============================================
 .claude/settings.local.json
+
+DELETE/
