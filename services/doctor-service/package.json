@@ -25,6 +25,7 @@
     "@nestjs/microservices": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
+    "amqp-connection-manager": "^5.0.0",
     "amqplib": "^0.10.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -64,19 +65,25 @@
   },
   "jest": {
     "moduleFileExtensions": ["js", "json", "ts"],
-    "rootDir": "src",
+    "rootDir": ".",
+    "roots": ["<rootDir>/src", "<rootDir>/tests"],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": { "^.+\\.(t|j)s$": ["ts-jest", { "isolatedModules": true }] },
+    "setupFiles": ["reflect-metadata"],
     "collectCoverageFrom": [
-      "**/*.(t|j)s",
-      "!**/*.spec.ts",
-      "!**/*.e2e-spec.ts",
-      "!**/main.ts",
-      "!**/*.module.ts",
-      "!**/*.d.ts"
+      "src/**/*.(t|j)s",
+      "!src/**/*.spec.ts",
+      "!src/**/*.e2e-spec.ts",
+      "!src/**/main.ts",
+      "!src/**/*.module.ts",
+      "!src/**/*.d.ts",
+      "!src/**/infrastructure/messaging/**",
+      "!src/**/infrastructure/persistence/*.orm-entity.ts",
+      "!src/app.controller.ts",
+      "!src/app.service.ts"
     ],
     "coverageReporters": ["lcov", "text-summary"],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "./coverage",
     "testEnvironment": "node"
   }
 }

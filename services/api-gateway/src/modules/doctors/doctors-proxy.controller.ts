@@ -48,6 +48,11 @@ export class DoctorsProxyController {
     return this.forward(req, res);
   }
 
+  @All('schedules')
+  proxySchedulesRoot(@Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.forward(req, res);
+  }
+
   private async forward(req: Request, res: Response): Promise<void> {
     const targetUrl = `${this.baseUrl}${req.path}`;
     const queryString = req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '';

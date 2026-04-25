@@ -35,7 +35,7 @@ export class PatientOrmEntity {
   @Column({ name: 'birth_date', type: 'date' })
   birthDate: Date;
 
-  @Column({ name: 'blood_type', length: 5, nullable: true })
+  @Column({ name: 'blood_type', type: 'varchar', length: 5, nullable: true })
   bloodType: string | null;
 
   @Column({ name: 'document_number', length: 20 })
