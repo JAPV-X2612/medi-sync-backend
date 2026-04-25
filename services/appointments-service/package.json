@@ -69,7 +69,15 @@
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": { "^.+\\.(t|j)s$": "ts-jest" },
-    "collectCoverageFrom": ["**/*.(t|j)s"],
+    "collectCoverageFrom": [
+      "**/*.(t|j)s",
+      "!**/*.spec.ts",
+      "!**/*.e2e-spec.ts",
+      "!**/main.ts",
+      "!**/*.module.ts",
+      "!**/*.d.ts"
+    ],
+    "coverageReporters": ["lcov", "text-summary"],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
