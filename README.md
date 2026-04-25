@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="assets/images/1-architecture-diagram.png" alt="Architecture Diagram" width="90%">
+<img src="assets/images/1-architecture-diagram.png" alt="Architecture Diagram" width="60%">
 
 **MediSync** is an event-driven microservices backend for managing medical appointments.
 Patients can schedule consultations with specialist doctors, choose available time slots,
@@ -102,7 +102,7 @@ src/
     └── http/        ← NestJS controllers (HTTP adapter)
 ```
 
-<img src="assets/images/3-domain-driven-design.png" alt="Domain-Driven Design" width="90%">
+<img src="assets/images/3-domain-driven-design.png" alt="Domain-Driven Design" width="70%">
 
 ### 🔷 Entity Relationship Model
 
@@ -275,7 +275,7 @@ All requests go through the **API Gateway** at `http://localhost:3000`.
 }
 ```
 
-<img src="assets/images/13-postman-create-patient.png" alt="Postman — Create Patient" width="70%">
+<img src="assets/images/13-postman-create-patient.png" alt="Postman — Create Patient">
 
 ---
 
@@ -309,7 +309,7 @@ All requests go through the **API Gateway** at `http://localhost:3000`.
 }
 ```
 
-<img src="assets/images/15-postman-create-doctor.png" alt="Postman — Create Doctor" width="70%">
+<img src="assets/images/15-postman-create-doctor.png" alt="Postman — Create Doctor">
 
 ---
 
@@ -330,7 +330,7 @@ All requests go through the **API Gateway** at `http://localhost:3000`.
 }
 ```
 
-<img src="assets/images/14-postman-create-specialty.png" alt="Postman — Create Specialty" width="70%">
+<img src="assets/images/14-postman-create-specialty.png" alt="Postman — Create Specialty">
 
 ---
 
@@ -355,7 +355,7 @@ All requests go through the **API Gateway** at `http://localhost:3000`.
 }
 ```
 
-<img src="assets/images/16-postman-create-appointment.png" alt="Postman — Create Appointment" width="70%">
+<img src="assets/images/16-postman-create-appointment.png" alt="Postman — Create Appointment">
 
 ---
 
@@ -400,7 +400,7 @@ generated in `coverage/lcov.info` and uploaded to **SonarCloud** for quality gat
 
 ### SonarCloud Analysis
 
-<img src="assets/images/8-frontend-and-backend-sonarcloud-analysis.png" alt="Frontend and Backend SonarCloud Analysis" width="70%">
+<img src="assets/images/8-frontend-and-backend-sonarcloud-analysis.png" alt="Frontend and Backend SonarCloud Analysis" width="80%">
 
 ---
 
