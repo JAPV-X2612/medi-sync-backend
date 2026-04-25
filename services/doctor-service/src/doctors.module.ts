@@ -51,7 +51,7 @@ import { SpecialtiesController } from './presentation/http/specialties.controlle
           transport: Transport.RMQ,
           options: {
             urls: [
-              `amqp://${config.get('RABBITMQ_USER')}:${config.get('RABBITMQ_PASS')}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}`,
+              `${config.get('RABBITMQ_PROTOCOL', 'amqp')}://${config.get('RABBITMQ_USER')}:${config.get('RABBITMQ_PASS')}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}`,
             ],
             queue: config.get<string>('EVENTS_EXCHANGE', 'medi-sync.events'),
             queueOptions: { durable: true },

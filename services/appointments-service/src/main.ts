@@ -16,6 +16,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
 
+  const rabbitmqProtocol = config.get<string>('RABBITMQ_PROTOCOL', 'amqp');
   const rabbitmqUser = config.get<string>('RABBITMQ_USER', 'guest');
   const rabbitmqPass = config.get<string>('RABBITMQ_PASS', 'guest');
   const rabbitmqHost = config.get<string>('RABBITMQ_HOST', 'localhost');
@@ -25,7 +26,9 @@ async function bootstrap(): Promise<void> {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
-      urls: [`amqp://${rabbitmqUser}:${rabbitmqPass}@${rabbitmqHost}:${rabbitmqPort}`],
+      urls: [
+        `${rabbitmqProtocol}://${rabbitmqUser}:${rabbitmqPass}@${rabbitmqHost}:${rabbitmqPort}`,
+      ],
       queue: 'appointments-service-queue',
       exchange,
       exchangeType: 'topic',
