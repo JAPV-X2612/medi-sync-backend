@@ -43,7 +43,7 @@ import { PatientsController } from './presentation/http/patients.controller';
             queueOptions: { durable: true },
             exchange: config.get<string>('EVENTS_EXCHANGE', 'medi-sync.events'),
             exchangeType: 'topic',
-            noAck: false,
+            noAck: true,
           },
         }),
       },
